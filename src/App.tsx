@@ -6,15 +6,19 @@ import ProgressController from "./components/ProgressController"
 
 
 const App: React.FC = () => {
-  let [apiData, setApiData]=useState();
+  let [data, setData]=useState();
   useEffect(()=>{
-    axios.get("http://pb-api.herokuapp.com/bars").then(response =>setApiData(response.data))
+    axios.get("http://pb-api.herokuapp.com/bars")
+    .then(response =>setData(response.data))
+    .catch(error=> {
+      console.log(error);
+    });
   },[]);
 
   return (
     <div className="App">
       <h1>Pragress Bar Demo</h1>
-      {apiData && <ProgressController data={apiData}/>}
+      {data && <ProgressController data={data}/>}
     </div>
   )
 }

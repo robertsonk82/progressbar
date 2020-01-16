@@ -40,6 +40,20 @@ it("Check value not be less than 0 ", () => {
   expect(progressBar1).toHaveTextContent("0%")
 });
 
+it("Select set 2nd progress bor and apply button click event", () => {
+  const { container, getByText} = render(<ProgressController data={apiData} />);
+  const button = getByText("12");
+  const progressBar2 = getByText("20%");
+
+  const select=container.querySelector("select");
+  if(select){
+    fireEvent.change(select,{target:{value:"1"}});
+  }
+
+  fireEvent.click(button);
+  expect(progressBar2).toHaveTextContent("29%")
+});
+
 it("Check css color for the bar crossed above 100% ", () => {
   apiData = {"buttons":[70,15,-50,-48],"bars":[74,26,20],"limit":130}
   const {container, getByText} = render(<ProgressController data={apiData} />);

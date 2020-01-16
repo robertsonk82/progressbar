@@ -13,20 +13,21 @@ data: ApiData;
 }
 
 function ProgressController(props: Props) {
-let { data } = props;
+//let { data } = props;
 
-let [apiData, setApiData] = useState<ApiData>(data);
+let [data, setData] = useState<ApiData>(props.data);
 
 let [selectedProgressBar, setSelectedProgressBar] = useState(0);
 
 function handleClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    let buttonValue = event.currentTarget.dataset.value || "0";
+    let buttonValue = event.currentTarget.dataset.value;
+    if(!buttonValue) return;
 
-    apiData.bars[selectedProgressBar] += parseInt(buttonValue);
-    if (apiData.bars[selectedProgressBar] < 0) {
-        apiData.bars[selectedProgressBar]= 0;
+    data.bars[selectedProgressBar] += parseInt(buttonValue);
+    if (data.bars[selectedProgressBar] < 0) {
+        data.bars[selectedProgressBar]= 0;
     }
-    setApiData({...apiData});
+    setData({...data});
 };
 
 function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -34,13 +35,13 @@ function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
 }
 
 //preparing the Progressbar View//
-let progressView = apiData.bars.map((bar, i)=>(
+let progressView = data.bars.map((bar, i)=>(
 <div key={i}>
-    <ProgressBar progressValue={bar} maxLimit={apiData.limit || 0} />
+    <ProgressBar progressValue={bar} maxLimit={data.limit} />
 </div>
 ));
 
-let optionsView = apiData.bars.map((bar,i) =>(
+let optionsView = data.bars.map((bar,i) =>(
     <option value={i} key={i}>
         Progress Bar {i+1}
     </option>
@@ -52,7 +53,7 @@ let selectView = (
     </select>
 );
 
-let buttonsView = apiData.buttons.map((button, i) =>(
+let buttonsView = data.buttons.map((button, i) =>(
     <button key={i} data-value={button} onClick={handleClick}>
         {button}
     </button>
